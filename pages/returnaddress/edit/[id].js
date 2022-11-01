@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import qs from 'qs';
 import Select from "react-select";
 import Modal from '../../../components/Modal/Modal';
-import { Country, State } from "country-state-city";
+// import { Country, State } from "country-state-city";
 import APIService from '../../../helper/APIService';
 import Loader from '../../../components/Shared/Loader';
 import { _formatCountryName, generateTimeStamp } from '../../../helper/helper';

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import APIService from '../../helper/APIService';
 import axios from 'axios';
 import Select from "react-select";
-import { Country, State } from "country-state-city";
+// import { Country, State } from "country-state-city";
 import { _formatCountryName } from '../../helper/helper';
 import { useRouter } from 'next/router';
 const Modal = dynamic(() => import('../../components/Modal/Modal'))

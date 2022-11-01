@@ -8,7 +8,7 @@ import Loader from '../../components/Shared/Loader';
 import ErrorMessage from '../../components/Shared/ErrorMessage';
 import { _formatCountryName, generateTimeStamp } from '../../helper/helper';
 import Select from "react-select";
-import { Country, State } from "country-state-city";
+// import { Country, State } from "country-state-city";
 
 
 const MailingList = () => {
