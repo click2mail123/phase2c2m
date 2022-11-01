@@ -11,7 +11,7 @@ const Loader = dynamic(() => import('../Shared/Loader'))
 const AddressCarousel = () => {
   const router = useRouter();
   const { state, setState } = useContext(NavContext);
-  const { selectedMailingList, jobId, documentId } = state
+  const { selectedMailingList, jobId, documentId, clonning } = state
 
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -36,12 +36,12 @@ const AddressCarousel = () => {
       }
     } else {
        let message = "Please wait 5 minutes and try again. One of our APIs has not responded in time."
-        message = convertXmltoJson(res.data.data)
-        message =  message?.job?.description?.text;
-        if(message.includes('Maximum')){
-          let numOfPages = message.slice(-4)
-          message = `File size is too big, Max number of supported pages are ${numOfPages}`
-       }
+      //   message = convertXmltoJson(res.data.data)
+      //   message =  message?.job?.description?.text;
+      //   if(message.includes('Maximum')){
+      //     let numOfPages = message.slice(-4)
+      //     message = `File size is too big, Max number of supported pages are ${numOfPages}`
+      //  }
       setError(true);
       setErrorMessage({ heading: message});
     }
@@ -49,7 +49,14 @@ const AddressCarousel = () => {
 
 
   const fetchAddressList = async (id) => {
-    const res = await APIService.get(`/addressLists/info?baseAddressListId=${id}`);
+    //shashank
+    let res
+    if(clonning === true){
+      res = await APIService.get(`/addressLists/info?jobAddressListId=${id}`);
+    }
+    else {
+     res = await APIService.get(`/addressLists/info?baseAddressListId=${id}`);
+    }
     if(res.status === 200){
       let { addresses: addList } = convertXmltoJson(res.data);
       return addList.address;
