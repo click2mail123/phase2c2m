@@ -32,13 +32,13 @@ export async function getServerSideProps(context) {
   let sessionId = null;
   const body = qs.stringify(payload)
   if (context?.query?.email) {    
-    let resturl
-    if(process.env.DEV && process.env.DEV.length > 0) {
-      resturl = 'https://stage-rest.click2mail.com' 
-    }
-    else {
-      resturl = 'https://rest.click2mail.com'
-    }
+    let resturl = 'https://stage-rest.click2mail.com' 
+    // if(process.env.DEV && process.env.DEV.length > 0) {
+    //   resturl = 'https://stage-rest.click2mail.com' 
+    // }
+    // else {
+    //   resturl = 'https://rest.click2mail.com'
+    // }
 
 
     let response = await axios.post(`${resturl}/molpro/system/users/singleSignOn`, body, { headers })
