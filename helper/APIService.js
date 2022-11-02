@@ -23,7 +23,7 @@ class APIService {
       return { status: response.status, data: response.data };
     } catch (error) {
       console.log('ERROR', error);
-//       return error;
+      //       return error;
       return { status: error.response, data: error.response };
     }
   }
@@ -44,6 +44,40 @@ class APIService {
       return response;
     } catch (error) {
       return { status: error.response, data: error.response };
+    }
+  }
+
+  async put(path, payload, headers = {}) {
+    try {
+      const copyHeaders = { ...headers };
+      let sessionId = getCookies('sessionid');
+      if (sessionId) {
+        copyHeaders['X-Auth-UserId'] = sessionId;
+      }
+      const response = await this.service.request({
+        method: 'PUT',
+        url: path,
+        data: payload,
+        headers: { ...copyHeaders }
+      });
+      return response;
+    } catch (error) {
+      return { status: error.response.status, data: error.response.data };
+    }
+  }
+
+  async delete(path) {
+    try {
+      let sessionId = getCookies('sessionid');
+      const response = await this.service.request({
+        method: 'DELETE',
+        url: path,
+        headers: { 'X-Auth-UserId': sessionId }
+      });
+      return { status: response.status, data: response.data };
+    } catch (error) {
+      console.log('ERROR', error);
+      return error;
     }
   }
 
