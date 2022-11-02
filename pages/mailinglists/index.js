@@ -1,14 +1,16 @@
 import { useState, useEffect, useContext } from 'react';
-import qs from 'qs'
+import qs from 'qs';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { convertXmltoJson, formatDate } from '../../helper/helper';
 import APIService from '../../helper/APIService';
 import { NavContext } from '../../components/Context/NavContextProvider';
-import Table from '../../components/Table/Table'
-import Loader from '../../components/Shared/Loader'
-const Modal = dynamic(() => import('../../components/Modal/Modal'))
-const ErrorMessage = dynamic(() => import('../../components/Shared/ErrorMessage'))
+import Table from '../../components/Table/Table';
+import Loader from '../../components/Shared/Loader';
+const Modal = dynamic(() => import('../../components/Modal/Modal'));
+const ErrorMessage = dynamic(() => import('../../components/Shared/ErrorMessage'));
+const SuccessMessage = dynamic(() => import('../../components/Shared/SuccessMessage'));
+const TabModal = dynamic(() => import('../../components/Shared/TabModal'));
 
 
 
@@ -21,7 +23,9 @@ const MailingLists = () => {
   const [mailingLists, setMailingLists] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
 
   //Fetch All mailing lists
@@ -73,7 +77,7 @@ const MailingLists = () => {
       }
     } else {
       setError(true);
-      setErrorMessage({heading: "Please wait 5 minutes and try again. One of our APIs has not responded in time."});
+      setErrorMessage({ heading: "Please wait 5 minutes and try again. One of our APIs has not responded in time." });
     }
     setLoading(false);
   }
@@ -93,7 +97,7 @@ const MailingLists = () => {
       handleModalClose();
     } else {
       setError(true);
-      setErrorMessage({heading: "Please wait 5 minutes and try again. One of our APIs has not responded in time."});
+      setErrorMessage({ heading: "Please wait 5 minutes and try again. One of our APIs has not responded in time." });
     }
     setLoading(false);
   }
@@ -107,24 +111,44 @@ const MailingLists = () => {
     }
   }
 
+  const handleNewMailingList = () => {
+    router.push('/mailinglists/newlist');
+  }
+
   const handleModalClose = () => {
     setIsModalOpen(false);
-    router.push('/', undefined, {scroll: false});
+    router.push('/', undefined, { scroll: false });
   }
 
   //Handle Mailing list edit
-  const handleEdit = (id) => {
-    router.push(`/mailinglists/${id}`, undefined, {scroll: false});
+  const handleEdit = (params) => {
+    console.log('paramsparams', params)
+    let id2 = params?.id
+    let name = params?.row?.title
+    router.push({ pathname: `/mailinglists/${id2}`, query: { addressListName: name } });
+  }
+
+  // Handle Mailing list delete
+  const handleDelete = async (id) => {
+    const res = await APIService.delete(`/addressLists/${id}`);
+    if (res.status === 200) {
+      setSuccess(true)
+      setSuccessMessage({ heading: "Delete Successfully" })
+      await getMailingLists();
+    }
   }
 
   //Render actions column
-  const renderActions = (id) => {
+  const renderActions = (params) => {
+    console.log('params inside the render action', params)
     return (
       <div className="align-content-center d-flex justify-content-between table-actions">
-        <span onClick={() => handleEdit(id)}>
-          {/* <Image  src="/images/edit.svg" alt="" className="me-3" width={15} height={15}/> */}
+        <span onClick={() => handleEdit(params)} title="Edit">
           <img src="/images/edit.svg" alt="" className="me-3" />
-          </span>
+        </span>
+        <span onClick={() => handleDelete(params?.id)} title="Delete">
+          <img src="/images/delete.svg" alt="" className="me-3" />
+        </span>
       </div>
     )
   }
@@ -153,7 +177,8 @@ const MailingLists = () => {
     { field: 'createdon', headerName: 'Date of creation', flex: 1 },
     {
       field: 'action', headerName: 'Action', flex: 0.5, renderCell: (params) => {
-        return renderActions(params.id);
+        console.log('paramsparams inside the return address', params)
+        return renderActions(params);
       }
     }
   ];
@@ -167,31 +192,39 @@ const MailingLists = () => {
   return (
     <div>
       {!error ?
-        <Modal isOpen={isModalOpen} closeBtn={handleModalClose}>
-          {loading ? <Loader /> : <>
-            <Table
-              rows={renderRows()}
-              columns={columns}
-              checkbox
-              tableHeader={"Mailing Lists"}
-              renderMobileListItem={renderMobileListItem}
-              renderActions={renderActions}
-              selectedRows={selectedRows}
-              rowSelectionHandler={rowSelectionHandler}
-              hideSelectAll
-            />
-            <div className="col-md-12 d-flex justify-content-end pe-0 mt-2 text-end">
-              <button className="btn btn-outline-primary me-2" onClick={handleModalClose}>Cancel</button>
-              <button
-                className={
-                  `btn btn-primary ${!(selectedRows && selectedRows.length > 0) && 'disable_Btn'}`} onClick={handleSubmit}>Done</button>
-            </div>
-          </>}
-        </Modal>
+        <>
+          {success === true ?
+            <SuccessMessage message={successMessage} handleSuccessClose={setTimeout(() => { setSuccess(false) }, 2000)} />
+            :
+            <Modal isOpen={isModalOpen} closeBtn={handleModalClose}>
+              <TabModal currentTab={1} buttons={[{ buttonText: "Contacts", url: "/contacts" }, { buttonText: "Mailing List", url: "/mailinglists" }]} />
+              {loading ? <Loader /> : <>
+                <Table
+                  rows={renderRows()}
+                  columns={columns}
+                  checkbox
+                  tableHeader={"Select a Mailing Lists"}
+                  renderMobileListItem={renderMobileListItem}
+                  renderActions={renderActions}
+                  selectedRows={selectedRows}
+                  rowSelectionHandler={rowSelectionHandler}
+                  hideSelectAll
+                />
+                <div className="col-md-12 d-flex flex-lg-row flex-md-row flex-sm-row flex-column justify-content-end pe-0 mt-2 text-end">
+                  <button className="btn btn-outline-primary me-lg-2 me-md-2 mb-2 mb-lg-0"
+                    onClick={handleNewMailingList}>
+                    <img src="/images/add.svg" alt="" className="me-2" />New List</button>
+                  <button
+                    className={
+                      `btn btn-primary ${!(selectedRows && selectedRows.length > 0) && 'disable_Btn'}`} onClick={handleSubmit}>Done</button>
+                </div>
+              </>}
+            </Modal>}
+        </>
         : <ErrorMessage message={errorMessage} handleErrorClose={() => setError(false)} />
       }
     </div>
   )
 }
 
-export default MailingLists
+export default MailingLists;
