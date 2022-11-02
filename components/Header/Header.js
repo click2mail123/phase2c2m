@@ -1,7 +1,6 @@
-import {useRouter} from 'next/router';
+import {useRouter} from 'next/router'
+import Link from 'next/link'
 import Image from 'next/image';
-import { getCookies } from '../../helper/helper';
-
 const Header = () => {
   const router = useRouter();
   return (
@@ -13,7 +12,11 @@ const Header = () => {
               <Image src='/images/logo.svg' height={50} width={200} alt='logo' className='img-fluid'/>
               </a>
           </div>
-        
+          <div className="col-md-6 col-lg-6 col-6 d-flex justify-content-end">
+            <div className="d-flex align-items-center me-3">
+              {/* <Image src='/images/ques.png' height={20} width={20} alt='logo' className='img-fluid'/> */}
+            </div>
+          </div>
         </div>
       </div>
     </header>

@@ -18,8 +18,6 @@ const FromDevice = () => {
   const [file, setFile] = useState(null);
   const [fileData, setFileData] = useState();
   const {sessionId } = state;
-  const [bar, setBar] = useState();
-
 
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -38,9 +36,9 @@ const FromDevice = () => {
       reader.onerror = () => console.log('file reading has failed')
       reader.onload = () => {
       // Do whatever you want with the file contents
-      // console.log('readeeeer', reader)
+      console.log('readeeeer', reader)
         const binaryStr = reader.result
-        // console.log('nnnnnnnnnnn', binaryStr)
+        console.log('nnnnnnnnnnn', binaryStr)
         // let data = Base64.atob(binaryStr);
         // var decodedData = base64_decode(binaryStr);
         // console.log('decodedDatadecodedData', decodedData)
@@ -104,18 +102,9 @@ const FromDevice = () => {
         'file' : formData
         // 'file' : test,
     }
-
-    const options = {
-      onUploadProgress: (progressEvent) => {
-        const {loaded, total} = progressEvent;
-        let percent = Math.floor( (loaded * 100) / total )
-        setBar(`${loaded}kb of ${total}kb | ${percent}%` );
-      }
-    }
-
     const body = qs.stringify(payload)
     // const body = payload
-    const res = await APIService.post(url, body, proxy, options );
+    const res = await APIService.post(url, body, proxy );
     if (res.status === 200) {
         console.log('Document uploaded successfully');
     } else {
@@ -124,8 +113,37 @@ const FromDevice = () => {
   }
 
 
+// upload documents through URL
+const uploadDocument = async (e, docUrl = 'http%3A%2F%2Fcoinmarketwp.technopium.com%2Fwp-content%2Fuploads%2F2022%2F02%2Ftest-c2-mail.pdf') => {
+  // setLoading(true);
+  const headers = {
+    'X-Auth-UserId': '7934e8c0ca659746fcbb35e65f20913e',
+  }
+  const payload = {
+    "documentFormat": "PDF",
+    "documentClass": "Letter 8.5 x 11",
+    "documentName": "Sample Letter",
+    "file": 'http%3A%2F%2Fcoinmarketwp.technopium.com%2Fwp-content%2Fuploads%2F2022%2F02%2Ftest-c2-mail.pdf'
+  }
+
+  const url = `/documents/url??documentName=test_g1&documentFormat=PDF&documentClass=Letter%208.5%20x%2011&url=${docUrl}`
+  console.log('UPLOADING START')
+  const res = await APIService.post(url, {}, headers);
+  if (res.status === 201) {
+    const { document } = convertXmltoJson(res.data);
+    if (document && document.id) {
+      setState({ ...state, documentId: document.id.text });
+    }
+  }
+  console.log('UPLOADING END')
+  // setLoading(false);
+}
+
+
 
 const selectSize = () => {
+  // setIsModalOpen(false);
+  // router.push('/', undefined, {scroll: false});
   router.push('/changesize', undefined, {scroll: false});
 }
 
@@ -167,16 +185,30 @@ const handleFileSelected = async (e) => {
 }
 
   return (
-        <div className=" tab-pane" id="device">
-        <div className="row  dashedBorder">
-          <div className="col-lg-12 p-0 table-responsive fixedHeight d-flex flex-column justify-content-center align-content-center align-items-center footAction">
-            <h4 className="fw-20 themeBlack fw-bold mb-0 ">Drag a file here</h4>
-            <p className="fw-12 textGray py-3">Or, if you prefer...</p>
-            <label className="btn btn-primary" >Select a file from your device</label>
-            <input onChange = { handleFileSelected} type = "file" id="uploadBtn" className="d-none" /> 
-          </div>
-        </div>
-      </div>     
+    <div> 
+       <h1> Files got from drive</h1> 
+      {/* <button onClick={() => getDriveFiles()}>Get all the files</button>  */}
+      {/* <FileUploader
+        multiple={true}
+        handleChange={handleChange}
+        name="file"
+        types={fileTypes}
+      /> */}
+      {/* {file ? <h3> Got files from the Device </h3> : <h4> No file found </h4>} 
+    <div {...getRootProps()}>
+      <input {...getInputProps()} />
+      {
+        isDragActive ?
+          <p>Drop the files here ...</p> :
+          <p>Drag 'n' drop some files here, or click to select files</p>
+      }
+    </div> */}
+
+
+      {/* <p>{file ? `File name: ${file[0].name}` : "no files uploaded yet"}</p>  */}
+       
+ <input onChange = { handleFileSelected} type = "file" /> 
+</div>
 )
 }
 export default FromDevice

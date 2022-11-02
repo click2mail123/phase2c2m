@@ -1,6 +1,7 @@
 
 import '../styles/globals.css'
 import '../styles/custom.css'
+
 import Head from 'next/head'
 import Layout from '../components/Layout/Layout'
 import Header from '../components/Header/Header'

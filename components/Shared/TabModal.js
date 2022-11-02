@@ -14,7 +14,7 @@ const TabModal = (props) => {
     <div className="d-flex justify-content-center align-content-center mt-2 mb-4">
       <div className="btn-group">
         {buttons && buttons.length > 0 && buttons.map((button,i) => (
-          <button key={i} type="button" className={activeTab === i ? 'btn btn-primary' : "btn btn-outline-primary"} onClick={() => toggleMode(button.url)}>{button.buttonText}</button>
+          <button type="button" className={activeTab === i ? 'btn btn-primary' : "btn btn-outline-primary"} onClick={() => toggleMode(button.url)}>{button.buttonText}</button>
         ))}
       </div>
     </div>

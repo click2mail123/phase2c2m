@@ -5,7 +5,7 @@ import { convertXmltoJson } from '../../helper/helper'
 
 const AddressBookDropdown = ({ currentDropdownValue = null, dropdownChangeHandler }) => {
   const router = useRouter();
-  const { pathname } = router;
+  const {pathname} = router;
   const [books, setBooks] = useState([]);
 
   const getAllAddressBooks = async () => {
@@ -37,7 +37,6 @@ const AddressBookDropdown = ({ currentDropdownValue = null, dropdownChangeHandle
       <option value="null">Select Address Book</option>
       {renderOptions()}
       {pathname === '/contacts' && <option value="newBook">Create New Address Book</option>}
-      {pathname === '/contacts' && <option value="manageBook">Manage Address Book</option>}
     </select>
   );
 }

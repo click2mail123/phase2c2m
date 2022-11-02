@@ -18,11 +18,9 @@ const NewAddressBook = () => {
   const [renderTable, setRenderTable] = useState(false)
   const [listInput, setListInput] = useState("")
   const [addBookId, setAddBookId] = useState()
-  const [newaddBookId, setNewAddBookId] = useState()
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [addSuccess, setAddSuccess] = useState(false);
-  const [newaddSuccess, setNewAddSuccess] = useState(false);
 
   const getAddressList = async () => {
     setLoading(true);
@@ -51,15 +49,15 @@ const NewAddressBook = () => {
   }
 
   //This Function builds js object for conversion to xml to add addresses to mailing list
-  const buildJsObjectForConversion = (finalselectedaddresses) => {
-    // const finalAddresses = addressList.filter(add => selectedRows.includes(add.id.text));
+  const buildJsObjectForConversion = () => {
+    const finalAddresses = addressList.filter(add => selectedRows.includes(add.id.text));
     const obj = {
       addressList: {
         addressListName: listInput,
         addressMappingId: 1,
         addresses:
         {
-          address: finalselectedaddresses.map(add => ({
+          address: finalAddresses.map(add => ({
             Firstname: add.name ? add.name.text : "",
             Organization: add.organization ? add.organization.text : "",
             Address1: add.address1 ? add.address1.text : "",
@@ -78,37 +76,9 @@ const NewAddressBook = () => {
     return obj;
   }
 
-  const getSelectedAddresses = (selectedRows, addressList) => {
-    let finalAddresses = []
-    selectedRows.map(select => {
-      addressList.map( address => {
-        if(select == address.id.text){
-          finalAddresses.push(address)
-        }
-      })
-    })
-    return finalAddresses
-    // finalAddresses = selectedRows.filter(select => addressList.includes(select))
-    console.log('finalAddressesfinalAddresses', finalAddresses)
-  }
 
   const handleAddToAddressBook = async () => {
-    let finalselectedaddresses = getSelectedAddresses(selectedRows, addressList)
-    const headers = {
-      'Accept': 'application/xml',
-      'Content-Type': 'application/xml',
-    }
-    const addressObject = buildJsObjectForConversion(finalselectedaddresses);
-    let body = convertJstoXml(addressObject);
-    const res = await APIService.post(`addressBook/${newaddBookId}/address`, body, headers);
-    if (res.status === 200) {
-      console.log('addresss addded successfully', res.data)
-      setNewAddSuccess(true);
-      setAddSuccess(true)
-    } else {
-      setError(true);
-      setErrorMessage({ heading: "Unable to add addresses to New Address Book" });
-    }
+   //TODO: Add to address book
   }
 
   const handleEdit = (addressInfo) => {
@@ -123,23 +93,6 @@ const NewAddressBook = () => {
 
   const handleNewAddress = () => {
     // navigate('/address', {state: { addressInfo: {}, mode: 'create' }})
-  }
-
-  const createNewContactList = async () => {
-    setRenderTable(true)
-    const headers = {
-      'Accept': 'application/xml',
-      'Content-Type': 'application/xml',
-    }
-    let bookname = listInput;
-    const res = await APIService.post(`addressBook?addressBookName=${bookname}`, headers);
-    if (res.status === 200) {
-      const newbook = convertXmltoJson(res.data);
-      setNewAddBookId(newbook?.addressList?.id?.text)
-    } else {
-      setError(true);
-      setErrorMessage({ heading: "Unable to create new address book" });
-    }
   }
 
   const renderActions = (addressInfo) => {
@@ -184,9 +137,11 @@ const NewAddressBook = () => {
   ];
 
   const renderMobileListItem = (row) => {
+
+    // TODO : Render mobile layout
     return <div>
       <p className="mb-0">{row.name}</p>
-      <p>{row.address}, {row.city}, {row.state}</p>
+      <p>{row.count} addresses | {row.createdon}</p>
     </div>
   }
 
@@ -205,7 +160,7 @@ const NewAddressBook = () => {
           <div className="align-items-center d-flex flex-column justify-content-center">
             <button type="submit"
               className={`btn btn-primary col-lg-6 col-12 mb-2  ${listInput.trim() === "" && 'disable_Btn'}`}
-              onClick={() => { createNewContactList() }}
+              onClick={() => {setRenderTable(true) }}
             >
               Next</button>
             <button className="btn btn-link col-lg-6 col-12 text-decoration-none" onClick={() => { router.push('/mailinglists') }}>Cancel</button>
@@ -221,10 +176,10 @@ const NewAddressBook = () => {
     } else if (addSuccess) {
       return <ErrorMessage
         variant="success"
-        message={{ heading: "Address Book created successfully", body: "" }}
+        message={{ heading: "Mailing List created successfully", body: "" }}
         handleErrorClose={() => {
           setAddSuccess(false);
-          router.push("/contacts");
+          router.push("/mailinglists");
         }} />
     } else if (error) {
       return <ErrorMessage message={errorMessage} handleErrorClose={() => setError(false)} />
@@ -241,7 +196,6 @@ const NewAddressBook = () => {
             selectedRows={selectedRows}
             rowSelectionHandler={rowSelectionHandler}
             hideSelectAll
-            backButton
             showAddressBookDropdown
             dropdownChangeHandler={(id) => { setAddBookId(id) }}
             currentDropdownValue={addBookId}

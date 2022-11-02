@@ -1,24 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
 import qs from 'qs';
 import Select from "react-select";
 import Modal from '../../../components/Modal/Modal';
 import { Country, State } from "country-state-city";
 import APIService from '../../../helper/APIService';
 import Loader from '../../../components/Shared/Loader';
-import { _formatCountryName, generateTimeStamp } from '../../../helper/helper';
-const SuccessMessage = dynamic(() => import('../../../components/Shared/SuccessMessage'))
-// const Country = dynamic(() => import('country-state-city'))
-// const State = dynamic(() => import('country-state-city'))
+import { _formatCountryName, generateTimeStamp } from '../../../helper/helper'
+import SuccessMessage from '../../../components/Shared/SuccessMessage'
+// const SuccessMessage = dynamic(() => import('../../../components/Shared/SuccessMessage'))
+
+
 
 const EditReturnAddress = () => {
+  console.log('EditReturnAddress is called')
   const router = useRouter();
-  const { state } = router.query;
-  const addressData = state;
+  const {state} = router.query;
+  const addressData = JSON.parse(state);
   const defaultError = {
     fnameerror: '', lnameerror: '', countryerror: '', address1error: '', cityerror: '', ziperror: '', stateerror: ''
   }
+
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [inputData, setInputData] = useState({
@@ -35,9 +38,11 @@ const EditReturnAddress = () => {
     addId: addressData?.addressId?.text || '',
   })
   const [addStatus, setAddStatus] = useState(null);
+  const [addMessage, setAddMessage] = useState(null);
   const [error, setError] = useState(defaultError);
-  const [success, setSuccess] = useState(false)
-  const [successMessage, setSuccessMessage] = useState("")
+  const [addSuccess, setaddSuccess] = useState(false);
+  const [success, setSuccess] = useState(false);
+
 
 
   const countries = Country?.getAllCountries();
@@ -46,7 +51,6 @@ const EditReturnAddress = () => {
     value: country.id,
     ...country
   }));
- 
   const updatedStates = (isoCode) => {
     let country = updatedCountries.filter(ct => ct.name === inputData.country.name)[0];
     const states = State.getStatesOfCountry(country?.isoCode || isoCode)
@@ -81,7 +85,7 @@ const EditReturnAddress = () => {
   }
 
   //handle update address
-  const  handleUpdateAddress = async () => {
+  const handleUpdateAddress = async () => {
     let errors = await checkValidation()
     setError(errors)
     if (!Object.keys(errors).length) {
@@ -94,11 +98,11 @@ const EditReturnAddress = () => {
         firstName: inputData?.fname,
         lastName: inputData?.lname,
         organization: inputData?.organization,
-        country: (inputData?.country['name'] === undefined ? inputData?.country : inputData?.country['name']),
+        country: (inputData.country['name'] === undefined ? inputData.country : inputData.country['name']),
         address1: inputData?.address1,
         city: inputData?.city,
         zip: inputData?.zip,
-        state: (inputData?.state['isoCode'] === undefined ? inputData?.state : inputData?.state['isoCode']),
+        state: (inputData?.state['isoCode'] === undefined ? inputData.state : inputData?.state['isoCode']),
         type: 'Return address',
         description: addressData?.description?.text
       }
@@ -107,12 +111,14 @@ const EditReturnAddress = () => {
       const res = await APIService.post(url, body, headers);
       if (res.status === 200) {
         setAddStatus("success");
-        setSuccess(true)
-        setSuccessMessage({ heading: "Return Address Updated", body: "" })
+        setSuccess(true);
+        // setAddMessage('Return Address Added');
+        setAddMessage({ heading: "Return Address updated Successfully"})
       } else {
         setAddStatus("fail");
       }
       setLoading(false);
+      SuccessMessage({ heading: "Return Address Added Successfully"})
     }
   }
 
@@ -138,24 +144,32 @@ const EditReturnAddress = () => {
         type: 'Return address',
         description: generateTimeStamp(),
       }
-
+      console.log('Before calling the api')
       const body = qs.stringify(payload)
       setLoading(true);
       const res = await APIService.post(url, body, headers);
-      if (res.status === 200) {
+      if (res.status === 200 || res.status === 201) {
         setAddStatus("success");
-        setSuccess(true)
-        setSuccessMessage({ heading: "Return Address Added Successfully", body: "" })
+        setSuccess(true);
+        // setAddMessage('Return Address Added');
+        setAddMessage({ heading: "Return Address Added Successfully"})
       } else {
         setAddStatus("fail");
       }
       setLoading(false);
     }
+
   }
+
+  // const handleModalClose = () => {
+  //   setIsModalOpen(false);
+  //   // navigate('/');
+  // }
+
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    router.push('/', undefined, { scroll: false });
+    router.push('/', undefined, {scroll: false});
   }
 
   const handleInputChange = (e) => {
@@ -174,20 +188,20 @@ const EditReturnAddress = () => {
             <h2 className="text-center p-0 fw-28">Return Address</h2>
           </div>
         </div>
-        <div className="row mb-lg-3 mb-md-3 mb-0">
-          <div className="col-lg-6 mb-lg-0 mb-md-0 mb-3">
+        <div className="row mb-4">
+          <div className="col-lg-6">
             <input type="text" placeholder="First Name" className="form-control" name="fname" value={inputData.fname} onChange={handleInputChange} />
             {error?.fnameerror ? <p className="text-danger">{error?.fnameerror}</p> : null}
           </div>
-          <div className="col-lg-6 mb-lg-0 mb-md-0 mb-3">
+          <div className="col-lg-6">
             <input type="text" placeholder="Last Name" className="form-control" name="lname" value={inputData.lname} onChange={handleInputChange} />{error?.lnameerror ? <p className="text-danger">{error?.lnameerror}</p> : null}
           </div>
         </div>
-        <div className="row mb-lg-3 mb-md-3 mb-0">
-          <div className="col-lg-6 mb-lg-0 mb-md-0 mb-3">
+        <div className="row mb-4">
+          <div className="col-lg-6">
             <input type="text" placeholder="Organization" className="form-control" name="organization" value={inputData.organization} onChange={handleInputChange} />
           </div>
-          <div className="col-lg-6 mb-lg-0 mb-md-0 mb-3 selectBx">
+          <div className="col-lg-6">
             <Select
               id="country"
               name="country"
@@ -198,7 +212,7 @@ const EditReturnAddress = () => {
               })}
               defaultValue={inputData.country}
               placeholder="Select country"
-              // className="select-return"
+              className="select-return"
               onChange={(value) => {
                 setInputData({ ...inputData, country: value });
               }}
@@ -206,34 +220,33 @@ const EditReturnAddress = () => {
             {error?.countryerror ? <p className="text-danger">{error?.countryerror}</p> : null}
           </div>
         </div>
-        <div className="row mb-lg-3 mb-md-3 mb-0">
-          <div className="col-lg-6 mb-lg-0 mb-md-0 mb-3">
+        <div className="row mb-4">
+          <div className="col-lg-6">
             <input type="text" placeholder="Address 1" className="form-control" name="address1" value={inputData.address1} onChange={handleInputChange} />
             {error?.address1error ? <p className="text-danger">{error?.address1error}</p> : null}
           </div>
-          <div className="col-lg-6 mb-lg-0 mb-md-0 mb-3">
+          <div className="col-lg-6">
             <input type="text" placeholder="Address 2" className="form-control" name="address2" value={inputData.address2} onChange={handleInputChange} />
           </div>
         </div>
-        <div className="row mb-lg-3 mb-md-3 mb-0">
-          <div className="col-lg-6 mb-lg-0 mb-md-0 mb-3">
+        <div className="row mb-4">
+          <div className="col-lg-6">
             <input type="text" placeholder="Address 3" className="form-control" name="address3" value={inputData.address3} onChange={handleInputChange} />
           </div>
-          <div className="col-lg-6 mb-lg-0 mb-md-0 mb-3">
+          <div className="col-lg-6">
             <input type="text" placeholder="City" className="form-control" name="city" value={inputData.city} onChange={handleInputChange} />
             {error?.cityerror ? <p className="text-danger">{error?.cityerror}</p> : null}
           </div>
         </div>
-        <div className="row mb-lg-3 mb-md-3 mb-0">
-          <div className="col-lg-6 mb-lg-0 mb-md-0 mb-3">
+        <div className="row mb-4">
+          <div className="col-lg-6">
             <input type="text" placeholder="ZIP Code" className="form-control" name="zip" value={inputData.zip} onChange={handleInputChange} />
             {error?.ziperror ? <p className="text-danger">{error?.ziperror}</p> : null}
           </div>
-          <div className="col-lg-6 mb-lg-0 mb-md-0 mb-3 selectBx">
+          <div className="col-lg-6">
             <Select
               id="state"
               name="state"
-              // className="select-return"
               options={updatedStates()}
               value={updatedStates().find(op => op.isoCode === inputData.state)}
               placeholder="Select state"
@@ -245,9 +258,9 @@ const EditReturnAddress = () => {
         </div>
 
         <div className="footAction d-flex">
-          <div className="ms-auto flex-lg-row flex-md-row flex-column-reverse d-flex response_btn">
+          <div className="ms-auto">
             <div className="btn btn-link text-decoration-none" onClick={handleModalClose}>Cancel</div>
-            <button type="submit" className="btn btn-primary" onClick={addressData && addressData.name ? handleUpdateAddress : handleAddAddress}>{addressData && addressData.name ? 'Update' : 'Save'}</button>
+            <button type="submit" className="btn btn-primary w-150" onClick={addressData && addressData.name ? handleUpdateAddress : handleAddAddress}>{addressData && addressData.name ? 'Update' : 'Save'}</button>
           </div>
         </div>
       </div>
@@ -257,18 +270,15 @@ const EditReturnAddress = () => {
 
   return (
     <div>
-      <Modal isOpen={isModalOpen} closeBtn={handleModalClose}>
-        {success ?
-          <SuccessMessage message={successMessage} handleSuccessClose={() =>{ 
-            setSuccess(false);
-            handleModalClose();
-          } 
-          } />
-          :
-          loading ? <Loader /> :
+      {!success ?
+        <Modal isOpen={isModalOpen} closeBtn={handleModalClose}>
+          {loading ? <Loader /> :
             renderAddressForm()
-        }
-      </Modal>
+          }
+        </Modal>
+        :
+        <SuccessMessage message={addMessage} handleSuccessClose={handleModalClose}/>  
+      }  
     </div>
   )
 }

@@ -32,7 +32,7 @@ const ReturnAddressList = () => {
       } else {
         setReturnAdd([address])
       }
-    } else {
+    }else {
       setError(true);
       setErrorMessage({ heading: "Unable to fetch Return addresses" });
     }
@@ -46,7 +46,7 @@ const ReturnAddressList = () => {
 
   const handleSubmit = async () => {
     let filteredReturnAddress = returnAdd.filter(ra => ra.addressId.text === selectedRows[0]);
-    setState({ ...state, returnAddress: filteredReturnAddress[0] })
+    setState({...state, returnAddress: filteredReturnAddress[0]})
     handleModalClose();
   }
 
@@ -56,18 +56,20 @@ const ReturnAddressList = () => {
   }
 
   const handleNewReturnAddress = () => {
-    const copyRouter = { ...router };
+    console.log('router iside the new return address', router)
+    const copyRouter = {...router};
+    console.log('copyRouter inide the new return address', copyRouter)
+
     copyRouter.query.state = JSON.stringify({});
     copyRouter.pathname = `/returnaddress/edit/new`;
-    router.push(copyRouter, `/returnaddress/edit/new`)
+    router.push(copyRouter,`/returnaddress/edit/new`)
   }
 
   const handleEdit = (id, data) => {
-    console.log('data inside the return addresss edit', data)
-    const copyRouter = { ...router };
-    copyRouter.query.state = JSON.stringify({ ...data });
+    const copyRouter = {...router};
+    copyRouter.query.state = JSON.stringify({...data});
     copyRouter.pathname = `/returnaddress/edit/${id}`;
-    router.push(copyRouter, `/returnaddress/edit/${id}`)
+    router.push(copyRouter,`/returnaddress/edit/${id}`)
   }
 
   const handleDelete = async (id) => {
@@ -86,7 +88,7 @@ const ReturnAddressList = () => {
 
 
   const renderActions = (id, data) => {
-    if (!data) {
+    if(!data){
       data = returnAdd.find(x => x?.addressId?.text === id);
     }
     return (
@@ -109,10 +111,10 @@ const ReturnAddressList = () => {
     const rows = returnAdd.map(list => {
       return {
         id: list.addressId.text,
-        name: `${list?.name?.firstName?.text} ${list?.name?.lastName?.text}`,
-        address: `${list?.address1?.text} ${list?.address2 == '' ? list?.address2?.text : ''}`,
-        city: list?.city?.text,
-        state: list?.state?.text,
+        name: `${list?.name?.firstName?.text} ${list?.name?.lastName.text}`,
+        address: `${list?.address1?.text} ${list?.address2 == '' ? list.address2.text : ''}`,
+        city: list.city.text,
+        state: list.state.text,
         rdata: list,
       }
     });
@@ -139,7 +141,7 @@ const ReturnAddressList = () => {
   }
 
   const renderModalBody = () => {
-    // console.log('addStatusaddStatusaddStatus', addStatus)
+    console.log('addStatusaddStatusaddStatus', addStatus)
     let bodyHtml;
     switch (addStatus) {
       case 'success':
@@ -179,7 +181,7 @@ const ReturnAddressList = () => {
   return (
     <div>
       {addStatus == null ?
-        <Modal isOpen={isModalOpen} closeBtn={handleModalClose} sizeClass="c2m_modal">
+        <Modal isOpen={isModalOpen} closeBtn={handleModalClose}>
           {loading ? <Loader /> : <>
             <Table
               rows={renderRows()}
@@ -192,14 +194,14 @@ const ReturnAddressList = () => {
               rowSelectionHandler={rowSelectionHandler}
               hideSelectAll
             />
-            <div className="col-md-12 d-flex flex-lg-row flex-md-row flex-sm-row flex-column justify-content-end pe-0 mt-2 text-end">
-              <button className="btn btn-outline-primary me-lg-2 me-md-2 mb-2 mb-lg-0"
+            <div className="col-md-12 d-flex justify-content-end pe-0 mt-2 text-end">
+              <button className="btn btn-outline-primary me-2 mb-2 mb-lg-0"
                 onClick={() => handleNewReturnAddress()}
-              >
+                >
                 <img src="/images/add.svg" alt="" className="me-2" />New Address</button>
               <button
                 className={
-                  `btn btn-primary ${!(selectedRows && selectedRows.length > 0) && 'disable_Btn'}`} onClick={handleSubmit}>Change to this Address</button>
+                  `btn btn-primary ${!(selectedRows && selectedRows.length > 0) && 'disable_Btn'}`} onClick={handleSubmit}>Done</button>
             </div>
           </>}
         </Modal>

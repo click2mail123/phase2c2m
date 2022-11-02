@@ -8,9 +8,11 @@ import FromDevice from '../../components/Docupload/FromDevice';
 // import FromDevice from './FromDevice';
 // import ChangeSize from '../ChangeSize/ChangeSize';
 import Modal from '../../components/Modal/Modal';
-import Router from 'next/router';
+import {useRouter} from 'next/router';
+
 
 const UploadFile = () => {
+  const router = useRouter();
   const [auth, setAuth] = useState();
   const [drive, setDrive] = useState();
   const [mode, setMode] = useState(null);
@@ -21,20 +23,21 @@ const UploadFile = () => {
 
   const { state, setState } = useContext(NavContext);
   const { googleAuthObject, documentUpload, documentSize, sessionId } = state;
+  
 
-
-  // Upload the downloded pdf extracted from Google drive
-  const uploadDocumentData = async (fileData) => {
+   // Upload the downloded pdf extracted from Google drive
+   const uploadDocumentData = async(fileData) => {
     const url = '/documents';
     const headers = {
       'Content-Type': 'multipart/form-data',
       'X-Auth-UserId': '5da047eb6bd23d481e5ebbbc80a301c4'
     }
     const payload = {
-      'documentFormat': 'PDF',
-      'documentClass': documentUpload,
+      'documentFormat':'PDF',
+      'documentClass':documentUpload,
       'documentName': 'shashank',
-      'file': fileData,
+      'file' : fileData,
+      // 'file' : test,
     }
     const body = qs.stringify(payload)
     console.log('8888888888888', body)
@@ -46,83 +49,82 @@ const UploadFile = () => {
     }
   }
 
-  const changeMode = () => {
-    mode ? setMode(null) : setMode('Device')
-  }
+const changeMode = () => {
+  mode ? setMode(null) : setMode('Device')
+ }
 
-  const changeSize = () => {
-    setMode("Letter 8.5 x 11")
-  }
+ const changeSize = () => {
+  setMode("Letter 8.5 x 11")
+ }
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    Router.push("/")
-  }
+const handleModalClose = () => {
+  setIsModalOpen(false);
+  router.push('/');
+}
 
-  const getDocument = () => {
-    return (
-      <div className="c2m_modal">
-        <div className="modal-body">
-          <div className="title ">
-            <h2 className="py-0">Please select a PDF</h2>
-          </div>
-          <div className="d-flex justify-content-center align-content-center py-4">
-            <div className="btn-group devicebtn nav ">
-            { googleAuthObject.accessToken ? 
-            <>
-              <button type="button" className={mode ? 'btn btn-outline-primary' : "btn btn-primary"} data-bs-toggle="pill" onClick={changeMode}>From Drive</button>
-              <button type="button" className={mode ? "btn btn-primary" : 'btn btn-outline-primary'} data-bs-toggle="pill" onClick={changeMode}>From Device</button>
-            </>
-            :
-            <>
-              <button type="button" className={mode ? 'btn btn-outline-primary' : "btn btn-primary"} data-bs-toggle="pill" onClick={changeMode}>From Device</button>
-              <button type="button" className={mode ? "btn btn-primary" : "btn btn-outline-primary"} data-bs-toggle="pill" onClick={changeMode}>From Drive</button>
-            </>
-            }
-            </div>
-          </div>
-          <div>
-          { googleAuthObject.accessToken ? 
-          <> {mode ?  <FromDevice /> : <FromDrive />}</> : <> { mode ?  <FromDrive /> : <FromDevice />}</> }
-          </div>
+const getDocument = () => {
+  return(
+    <div className="modal-body">
+    <div className="d-flex justify-content-center align-content-center">
+      <div className="btn-group">
+        <button type="button" className= {mode ?'btn btn-outline-primary' : "btn btn-primary"} onClick={changeMode}>From Drive</button>
+        <button type="button" className={mode ? "btn btn-primary" :'btn btn-outline-primary' }  onClick={changeMode}>From Device</button>
+      </div>
+    </div>
+    {mode ? 
+    <div className="container">
+      <div className="d-flex justify-content-between align-items-center row border py-1 border-bottom-0">
+        <div className="col-lg-12 col-12 ">
+        <FromDevice />
         </div>
       </div>
-    )
-  }
-
-  const handleSubmit = async () => {
-    // if (jobId && jobId !== "") {
-    //   await updateJob(jobId);
-    // } else {
-    //   await createJob();
-    // }
-    // handleModalClose();
-    uploadDocumentData(documentUpload);
-  }
-
-
-  const getSize = () => {
-    return (
-      <div>
-        {/* <ChangeSize /> */}
-        <button
-          className={
-            `btn btn-primary ${!(documentSize && documentSize.length > 0) && 'disable_Btn'}`} onClick={handleSubmit}>Continue</button>
+    </div>
+    :
+    <div className="container">
+      <div className="d-flex justify-content-between align-items-center row border py-1 border-bottom-0">
+        <div className="col-lg-12 col-12 ">
+          <FromDrive />
+        </div>
       </div>
-    )
-  }
+    </div>
+    }
+  </div>
+  )
+}
+
+const handleSubmit = async () => {
+  // if (jobId && jobId !== "") {
+  //   await updateJob(jobId);
+  // } else {
+  //   await createJob();
+  // }
+  // handleModalClose();
+  uploadDocumentData(documentUpload);
+}
+
+
+const getSize = () => {
+  return(
+   <div>
+   <ChangeSize />
+   <button
+        className={
+          `btn btn-primary ${!(documentSize && documentSize.length > 0) && 'disable_Btn'}`} onClick={handleSubmit}>Continue</button>
+   </div>
+  )
+}
 
   console.log('fillllllllles', file);
   return (
     <Modal isOpen={isModalOpen} closeBtn={handleModalClose} >
       <>
         {documentUpload ? getSize() : getDocument()}
-      </>
-    </Modal>
-    // <h1> I am drive  getDriveFiles </h1>
+      </>        
+  </Modal>
+  // <h1> I am drive  getDriveFiles </h1>
     // <button onClick={() => getDriveFiles()}>Open Picker</button>
 
-
+ 
   )
 }
 

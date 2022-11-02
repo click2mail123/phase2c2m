@@ -50,7 +50,6 @@ const NewMailingList = () => {
 
   //This Function builds js object for conversion to xml to add addresses to mailing list
   const buildJsObjectForConversion = () => {
-    console.log('addressListaddressList....................', addressList)
     const finalAddresses = addressList.filter(add => selectedRows.includes(add.id.text));
     const obj = {
       addressList: {
@@ -84,9 +83,7 @@ const NewMailingList = () => {
       'Content-Type': 'application/xml',
     }
     const addressObject = buildJsObjectForConversion();
-    console.log('addressObjectaddressObject................', addressObject)
     let body = convertJstoXml(addressObject);
-    console.log('bodybodybodybodybodybody................', body)
 
     const res = await APIService.post("/addressLists", body, headers);
     if (res.status === 200) {
@@ -109,7 +106,7 @@ const NewMailingList = () => {
 
   const handleNewAddress = () => {
     //TODO: Add update Handler
-    // router.push('/mailinglists/newaddress')
+    // navigate('/address', {state: {addressInfo: {}, mode: 'create'}})
   }
 
   const renderActions = (addressInfo) => {
@@ -130,11 +127,11 @@ const NewMailingList = () => {
   const renderRows = () => {
     const rows = addressList.map(address => {
       return {
-        id: address?.id?.text,
-        name: address?.name?.text,
-        address: address?.address1?.text,
-        city: address?.city?.text,
-        state: address?.state?.text,
+        id: address.id.text,
+        name: address.name.text,
+        address: address.address1.text,
+        city: address.city.text,
+        state: address.state.text,
         addressInfo: address
       }
     });
@@ -166,7 +163,7 @@ const NewMailingList = () => {
     return (
       <div className="modal-body my-md-5 py-md-5">
         <div className="title text-center fw-bold mb-4">
-          <h5>Create New List</h5>
+          <h5>Select a Mailing List</h5>
         </div>
         <div className="form-group col-lg-6 col-12 mx-auto">
           <input type="text" placeholder="List Name" required={true}

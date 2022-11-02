@@ -6,7 +6,8 @@ import Modal from '../Modal/Modal'
     - body                --> String text for smaller body 
 */
 const SuccessMessage = (props) => {
-  const {heading = "Success", body = "Thank you!"} = props.message;
+    console.log('props inside the success message', props)
+  const {heading = "Successful", body = "Congratulations!"} = props.message;
   const {className = ""} = props;
   return (
     <Modal isOpen={true} closeBtn={props.handleSuccessClose} sizeClass={`small-modal ${className}`}>
@@ -16,7 +17,7 @@ const SuccessMessage = (props) => {
         <div className="modal-body">
           <div className="text-center">
             <a href="#" className="mb-2">
-              <img src="/images/gChek.svg" alt=""/>
+              <img src="/images/check.svg" alt=""/>
             </a>
             <h4 className="mb-2 successText">{heading}</h4>
             <p className="mb-2">{body}</p>
@@ -27,4 +28,4 @@ const SuccessMessage = (props) => {
   )
 }
 
-export default SuccessMessage;
+export default SuccessMessage

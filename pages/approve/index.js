@@ -38,7 +38,7 @@ const DocumentApproval = () => {
       const { job } = convertXmltoJson(res.data)
       if (job && job.id) {
         setProofUrl(job.statusUrl.text);
-        setState({ ...state, proofId: job.id.text, globalproofUrl: job.statusUrl.text});
+        setState({ ...state, proofId: job.id.text });
       }
     } else {
       setError(true);

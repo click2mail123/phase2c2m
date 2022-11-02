@@ -21,7 +21,6 @@ const Contacts = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [addBookId, setAddBookId] = useState()
-  const [addInfo, setAddInfo] = useState()
   const [addressList, setAddressList] = useState([]);
 
 
@@ -117,46 +116,23 @@ const Contacts = () => {
 
   //Handle Mailing list edit
   const handleEdit = (addressInfo) => {
-    console.log('addressInfoaddressInfoaddressInfo', addressInfo)
-    let addressInfoTwo = addressInfo;
     //TODO: Update Handler
     let addressId = addressInfo.id.text;
-    setAddInfo(addressInfo)
-    console.log('addressInfoTwoaddressInfoTwo', addressInfoTwo)
-    addressInfoTwo.addBookId = addBookId;
     // navigate(`/address`, { state: { addressInfo: addressInfo, mode: 'update' } });
-    // router.push({ pathname: `/contacts/addnewaddress`, query: { id: addBookId, addressInfo: addressInfoTwo } });
-    // console.log('data inside the return addresss edit', data)
-    const copyRouter = { ...router };
-    copyRouter.query.state = JSON.stringify({ ...addressInfoTwo });
-    // copyRouter.pathname = '/contacts/addnewaddress';
-    // router.push(copyRouter)
   }
 
   const handleDelete = async (id) => {
     //TODO : Handle Delete
   }
 
-  const handleNewAddress = (addBookId) => {
-    // router.push("/contacts/addnewaddress");
-    // router.push({ pathname: `/contacts/addnewaddress`, query: { id: addBookId} });
-    let addressInfoTwo = {};
-    addressInfoTwo.addBookId = addBookId
-    const copyRouter = { ...router };
-    // copyRouter.query.state = addressInfoTwo;
-    copyRouter.query.state = JSON.stringify({ ...addressInfoTwo });
-
-    // copyRouter.pathname = '/contacts/addnewaddress';
-    // router.push(copyRouter)
+  const handleNewAddress = () => {
+    // navigate('/address', {state: { addressInfo: {}, mode: 'create' }})
   }
 
   const handleDropDownChange = (id) => {
     if(id === "newBook"){
       router.push('/addressbook/newbook')
-    } else if (id === "manageBook"){
-      router.push('/addressbook/managebook')
-    } 
-    else {
+    }else {
       setAddBookId(id)
     }
   }
@@ -180,11 +156,11 @@ const Contacts = () => {
   const renderRows = () => {
     const rows = addressList.map(address => {
       return {
-        id: address?.id?.text,
-        name: address?.name?.text,
-        address: address?.address1?.text,
-        city: address?.city?.text,
-        state: address?.state?.text,
+        id: address.id.text,
+        name: address.name.text,
+        address: address.address1.text,
+        city: address.city.text,
+        state: address.state.text,
         addressInfo: address
       }
     });
@@ -204,12 +180,12 @@ const Contacts = () => {
   ];
 
   const renderMobileListItem = (row) => {
+    //TODO
     return <div>
-      <p className="mb-0">{row.name}</p>
-      <p>{row.address}, {row.city}, {row.state}</p>
+      <p className="mb-0">{row.title}</p>
+      <p>{row.count} addresses | {row.createdon}</p>
     </div>
   }
-
   return (
     <div>
       {!error ?
@@ -231,9 +207,9 @@ const Contacts = () => {
                 dropdownChangeHandler={(id) => {handleDropDownChange(id)}}
                 currentDropdownValue={addBookId}
               />
-              <div className="col-md-12 d-flex flex-lg-row flex-md-row flex-sm-row flex-column justify-content-end pe-0 mt-2 text-end">
-                <button className="btn btn-outline-primary me-lg-2 me-md-2 mb-2 mb-lg-0"
-                  onClick={() => {handleNewAddress(addBookId)}}>
+              <div className="col-md-12 d-flex justify-content-end pe-0 mt-2 text-end">
+                <button className="btn btn-outline-primary me-2 mb-2 mb-lg-0"
+                  onClick={() => {handleNewAddress()}}>
                   <img src="/images/add.svg" alt="" className="me-2" />New Address</button>
                 <button
                   className={

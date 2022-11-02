@@ -42,7 +42,7 @@ const HomepageOrderHistory = () => {
                 <div className="d-flex justify-content-between">
                   <h4 className="fw-14 fw-bold mb-1 themeBlack">{list.id.text}</h4>
                   <h4 className={status === "EDITING" ? "text-warning fw-14 fw-bold mb-1" : status === "AWAITING_PRODUCTION" ? "themeRed fw-14 fw-bold mb-1" : "themeGreen fw-14 fw-bold mb-1"}>
-                    {status === "AWAITING_PRODUCTION" ? "Awaiting Production" : status === "ORDER_PROCESSING" ? "In Production" : status === "EDITING" ? "Editing" : ""}
+                    {status === "AWAITING_PRODUCTION" ? "Awaiting Production" : status === "ORDER_PROCESSING" ? "In Production" : status === "EDITING" ? "Editting" : ""}
                   </h4>
                 </div>
                 <div className="d-flex justify-content-between">

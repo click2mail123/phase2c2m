@@ -11,7 +11,7 @@ import CostBreakdownTable from '../../components/Shared/CostBreakdownTable';
 const JobHistory = () => {
   const router = useRouter();
   const { state, setState } = useContext(NavContext);
-  const { sessionId, selectedMailingList, costBreakdown, proofStatus, jobId  } = state;
+  const { sessionId } = state;
   const [orderLists, setOrderLists] = useState([]);
   const [loading, setLoading] = useState(false);
   const [jobCost, setJobCost] = useState({});
@@ -53,7 +53,6 @@ const JobHistory = () => {
       <b className={status === "EDITING" ? "text-warning" : status === "AWAITING_PRODUCTION" ? "themeRed" : "themeGreen"}>{status === "AWAITING_PRODUCTION" ? "AWAITING PRODUCTION" : status === "ORDER_PROCESSING" ? "IN PRODUCTION" : status}</b>
     )
   }
-  
   const columns = [
     { field: 'id', headerName: 'Job Id', flex: 0.5 },
     { field: 'document', headerName: 'Documents', flex: 1 },
@@ -74,43 +73,16 @@ const JobHistory = () => {
   const renderMobileListItem = (row) => {
     return <div>
       <p className="mb-0 h5">{row.document}</p>
-      <p>Job Id {row.id} | {row.noOfPieces} pieces</p>
-      <p>Sent on {row.submittedDate}</p>
+      <p>{row.id} | {row.noOfPieces}</p>
+      <p>{row.submittedDate}</p>
       <p>{renderStatus(row)}</p>
     </div>
   }
 
 
-  const getJobInfoAndSetData = async (id) => {
-    let jobId = id;
-    const res = await APIService.get(`/jobs/info/${jobId}`);
-    if (res.status === 200 || res.status === 201) {
-      const jobdetails = convertXmltoJson(res.data);
-      console.log('jobdetailsjobdetails000000000', jobdetails)
-      setState({ ...state, 
-        selectedMailingList: [jobdetails.job.jobAddressId.text],
-        jobId: jobdetails.job.id.text,
-        documentName: jobdetails.job.document.text,
-        documentId: jobdetails.job.jobDocumentId.text,
-        layout: jobdetails.job.layout.text,
-        mailClass: jobdetails.job.mailClass.text,
-        noOfPieces: jobdetails.job.noOfPieces.text,
-        paperType: jobdetails.job.paperType.text,
-        printOption: jobdetails.job.printOption.text,
-        jobAddressId: jobdetails.job.jobAddressId.text,
-        documentName: jobdetails.job.document.text,
-        documentSize: jobdetails.job.documentClass.text,
-        envelope: jobdetails.job.envelope.text,
-        cost: jobdetails.job.cost.text,
-        clonning: true
-      });
-      router.push('/', undefined, {scroll: false});
-    } 
-  }
-
-
-  const handleEdit = async (id) => {
-    getJobInfoAndSetData(id)
+  const handleEdit = (id) => {
+    //TODO
+    console.log('handleEdit-------', id)
   }
 
   const handleDeleteJob = async (jobId) => {
@@ -129,13 +101,10 @@ const JobHistory = () => {
   }
 
   const handleClone = async (id) => {
-    //First Duplicate the job
+    //TODO
     const res = await APIService.post(`/jobs/${id}/duplicate`, {}, {});
-    const dupJob = convertXmltoJson(res.data)
-    console.log('Info', dupJob)
-    console.log('Info', dupJob?.job?.id?.text)
-    // Then call the job detail api and set the data
-    getJobInfoAndSetData(dupJob?.job?.id?.text)
+    const xmlRes = convertXmltoJson(res.data)
+    console.log('Info', xmlRes)
   }
 
   const handlePrice = async (id) => {
@@ -177,10 +146,6 @@ const JobHistory = () => {
     )
   }
 
-  const handleJobClick = () => {
-    router.push('/addnewdoc', undefined, { scroll: false });
-  }
-
   const renderJobCostBreakdown = () => {
     return <Modal
       isOpen={showCostModal}
@@ -188,10 +153,10 @@ const JobHistory = () => {
         setShowCostModal(false);
         setJobCost(null);
       }}
-      sizeClass={`popover costboxsize`}
-    >
+      sizeClass={`popover`}
+      >
       <h2 className="text-center py-4">Cost Breakdown</h2>
-      <CostBreakdownTable costBreakdown={jobCost} />
+      <CostBreakdownTable costBreakdown={jobCost}/>
     </Modal>
   }
 
@@ -208,8 +173,8 @@ const JobHistory = () => {
                     <h4 className="text-start mb-0 fw-28 fw-bold">Job History</h4>
                   </div>
                   <div className="col-md-6 col-12 col-sm-6  text-end d-flex justify-content-end flex-column flex-sm-row flex-lg-row p-2 ms-sm-2">
-                    <a className="btn btn-outline-primary me-2 col-lg-4 col-sm-5 col-12 mb-2" onClick={() => router.push("/")}>Back To Home</a>
-                    <a onClick={handleJobClick} className="btn btn-primary  col-lg-4 col-sm-7 col-12" data-bs-toggle="modal" ><img src="/images/wadd.svg" alt="" className="me-2" /> Start a New Job </a>
+                    <a className="btn btn-outline-primary me-2 col-lg-4 col-sm-5 col-12 mb-2" onClick={() => router.back()}>Back To Home</a>
+                    <a href="#addnewJob" className="btn btn-primary  col-lg-4 col-sm-7 col-12" data-bs-toggle="modal" ><img src="/images/wadd.svg" alt="" className="me-2" /> Start a New Job </a>
                   </div>
                 </div>
                 <div className="p-0 ">

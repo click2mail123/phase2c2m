@@ -23,13 +23,15 @@ const ChangeSize = () => {
   const [selectsize, setselectsize] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [size, setSize] = useState()
-
+  // const { state, setState } = useContext(NavContext);
+  // const { documentSize } = state;
  
   const handleSelect = (e) => {
     setSize(e.target.value)  
     setState({...state,  documentSize:e.target.value})
   }
  
+  console.log('sizeeeeeeee', size)
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -37,36 +39,41 @@ const ChangeSize = () => {
   }
 
 
+  // const saveDocumentSize = () => {
+  //   setIsModalOpen(false);
+  //   router.push('/', undefined, {scroll: false});
+  // }
+ 
  
   return (
-    // <div className="modal c2m_modal" id="changeSizeModal">
-    <Modal isOpen={isModalOpen} closeBtn={handleModalClose} sizeClass="small-modal hide-border">
-      <div className="modal-dialog modal-dialog-centered modal c2m_modal">
-        <div className="modal-content">
-          <div className="modal-header border-0 pb-0 pt-3">
+    // <div class="modal c2m_modal" id="changeSizeModal">
+    <Modal isOpen={isModalOpen} closeBtn={handleModalClose} sizeClass="small-modal">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+          <div class="modal-header border-0 pb-0 pt-3">
           </div>
           <form action="#">
-            <div className="modal-body  ">
-              <div className="container p-0">
-                <div className="align-items-end d-flex justify-content-between mb-lg-4 mb-2 row">
-                  <div className="title mx-auto">
-                    <h2 className=" text-center p-0 ">Which size is your document?</h2>
+            <div class="modal-body  ">
+              <div class="container p-0">
+                <div class="align-items-end d-flex justify-content-between mb-lg-4 mb-2 row">
+                  <div class="title mx-auto">
+                    <h2 class=" text-center p-0 ">Which size is your document?</h2>
                   </div>
                 </div>
-                <div className="layoutSection fixedHeight">
-                  <input type="radio" name="changeSize" id="small" className="d-none" value="Letter 8.5 x 11" onChange={handleSelect}/>
-                  <label className="small fw-16 fw-bold themeBlack text-center">US Letter<br/>
+                <div class="layoutSection fixedHeight">
+                  <input type="radio" name="changeSize" id="small" class="d-none" value="Letter 8.5 x 11" onChange={handleSelect}/>
+                  <label for="small" class="small fw-16 fw-bold themeBlack text-center">US Letter<br/>
                   8.5x11</label>
-                  <div className="px-3 fw-16 fw-bold themeBlack">OR</div>
-                  <input type="radio" name="changeSize" id="large" className="d-none" value="Letter 8.5 x 14" onChange={handleSelect}/>
-                  <label className="large fw-16 fw-bold themeBlack text-center">US Legal<br/>
+                  <div class="px-3 fw-16 fw-bold themeBlack">OR</div>
+                  <input type="radio" name="changeSize" id="large" class="d-none" value="Letter 8.5 x 14" onChange={handleSelect}/>
+                  <label for="large" class="large fw-16 fw-bold themeBlack text-center">US Legal<br/>
                   8.5x14</label>
                 </div>
               </div>
             </div>
-            <div className="modal-footer  footAction border-top-0">
-              <div className=" d-flex flex-column flex-lg-row justify-content-end ms-auto p-0 pe-0 text-end ">
-                {/* <a href="#" className="btn  btn-primary w-150" onClick={saveDocumentSize}>Continue</a> */}
+            <div class="modal-footer  footAction border-top-0">
+              <div class=" d-flex flex-column flex-lg-row justify-content-end ms-auto p-0 pe-0 text-end ">
+                {/* <a href="#" class="btn  btn-primary w-150" onClick={saveDocumentSize}>Continue</a> */}
                 <button className={`btn btn-primary w-150 `} onClick={handleModalClose}>Continue</button>
               </div>
             </div>
