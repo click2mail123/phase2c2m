@@ -22,106 +22,106 @@ const FromDevice = () => {
 
 
 
-  const onDrop = useCallback((acceptedFiles) => {
-    acceptedFiles.forEach((file) => {
-      Object.assign(file, {
-        preview: URL.createObjectURL(file)
-      })
+  // const onDrop = useCallback((acceptedFiles) => {
+  //   acceptedFiles.forEach((file) => {
+  //     Object.assign(file, {
+  //       preview: URL.createObjectURL(file)
+  //     })
       
-      console.log('fileeee', file)
-      let fileurl = file.preview;
-      let fileurl2 = encodeURI(fileurl)
-      console.log('fileurlfileurl', fileurl2)
-      const reader = new FileReader()
+  //     console.log('fileeee', file)
+  //     let fileurl = file.preview;
+  //     let fileurl2 = encodeURI(fileurl)
+  //     console.log('fileurlfileurl', fileurl2)
+  //     const reader = new FileReader()
 
-      reader.onabort = () => console.log('file reading was aborted')
-      reader.onerror = () => console.log('file reading has failed')
-      reader.onload = () => {
-      // Do whatever you want with the file contents
-      // console.log('readeeeer', reader)
-        const binaryStr = reader.result
-        // console.log('nnnnnnnnnnn', binaryStr)
-        // let data = Base64.atob(binaryStr);
-        // var decodedData = base64_decode(binaryStr);
-        // console.log('decodedDatadecodedData', decodedData)
-        uploadDocumentData(binaryStr)
+  //     reader.onabort = () => console.log('file reading was aborted')
+  //     reader.onerror = () => console.log('file reading has failed')
+  //     reader.onload = () => {
+  //     // Do whatever you want with the file contents
+  //     // console.log('readeeeer', reader)
+  //       const binaryStr = reader.result
+  //       // console.log('nnnnnnnnnnn', binaryStr)
+  //       // let data = Base64.atob(binaryStr);
+  //       // var decodedData = base64_decode(binaryStr);
+  //       // console.log('decodedDatadecodedData', decodedData)
+  //       uploadDocumentData(binaryStr)
 
-      }
-      reader.readAsBinaryString(file)
-      //call document upload 
-      // const base64String = btoa(String.fromCharCode(...new Uint8Array(reader.result)));
-      // console.log('base64Stringbase64String', base64String)
-    //   console.log("Uploading document");
-    //   // var self = this;
-    //   // var credentials = this.username + ':' + this.passw;
-    //   var options ={
-    //     url :  'https://stage-rest.click2mail.com/molpro/documents/',
-    //     //port: 443,
-    //     method: 'POST',
-    //      headers: {
-    //   'Authorization': 'Basic Y2xpY2sybWFpbDEyMzpDbGljazJtYWlsQDEyMw==',
-    //   // 'X-Auth-UserId': '7934e8c0ca659746fcbb35e65f20913e',
-    //   'Content-Type': 'multipart/form-data'
-    //   },
-    //   formData: {
-    //   //  'file':fs.createReadStream(docOptions.pdfFile),
-    //   //  'file':reader.readAsDataURL(fileurl2),
-    //    'file':binaryStr,
-    //    'documentFormat':'PDF',
-    //    'documentClass':'Letter 8.5 x 11',
-    //    'documentName': 'shashank',
-    //   }
-    // }
-    //   let response = axios.post(options)
-    //   console.log('66666666666666', response)
-    })
+  //     }
+  //     reader.readAsBinaryString(file)
+  //     //call document upload 
+  //     // const base64String = btoa(String.fromCharCode(...new Uint8Array(reader.result)));
+  //     // console.log('base64Stringbase64String', base64String)
+  //   //   console.log("Uploading document");
+  //   //   // var self = this;
+  //   //   // var credentials = this.username + ':' + this.passw;
+  //   //   var options ={
+  //   //     url :  'https://stage-rest.click2mail.com/molpro/documents/',
+  //   //     //port: 443,
+  //   //     method: 'POST',
+  //   //      headers: {
+  //   //   'Authorization': 'Basic Y2xpY2sybWFpbDEyMzpDbGljazJtYWlsQDEyMw==',
+  //   //   // 'X-Auth-UserId': '7934e8c0ca659746fcbb35e65f20913e',
+  //   //   'Content-Type': 'multipart/form-data'
+  //   //   },
+  //   //   formData: {
+  //   //   //  'file':fs.createReadStream(docOptions.pdfFile),
+  //   //   //  'file':reader.readAsDataURL(fileurl2),
+  //   //    'file':binaryStr,
+  //   //    'documentFormat':'PDF',
+  //   //    'documentClass':'Letter 8.5 x 11',
+  //   //    'documentName': 'shashank',
+  //   //   }
+  //   // }
+  //   //   let response = axios.post(options)
+  //   //   console.log('66666666666666', response)
+  //   })
     
-  }, [])
+  // }, [])
 
   // const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
   
   // Upload the document to the click2mail server
     // Upload the downloded pdf extracted from Google drive
-  const uploadDocumentData = async(formData) => {
-    console.log('yyyyyyyyyyyyy', formData)
-    const url = '/documents';
-    const headers = {
-        'Content-Type': 'multipart/form-data',
-        'X-Auth-UserId': '5da047eb6bd23d481e5ebbbc80a301c4'
-    }
+  // const uploadDocumentData = async(formData) => {
+  //   console.log('yyyyyyyyyyyyy', formData)
+  //   const url = '/documents';
+  //   const headers = {
+  //       'Content-Type': 'multipart/form-data',
+  //       'X-Auth-UserId': '5da047eb6bd23d481e5ebbbc80a301c4'
+  //   }
 
-    const proxy = {
-        host: 'localhost',
-        port: 3000,
-        'Content-Type': 'multipart/form-data',
-        'X-Auth-UserId': '5da047eb6bd23d481e5ebbbc80a301c4'
-      }
+  //   const proxy = {
+  //       host: 'localhost',
+  //       port: 3000,
+  //       'Content-Type': 'multipart/form-data',
+  //       'X-Auth-UserId': '5da047eb6bd23d481e5ebbbc80a301c4'
+  //     }
 
-    const payload = {
-        'documentFormat':'PDF',
-        'documentClass':'Letter 8.5 x 11',
-        'documentName': 'shashank',
-        'file' : formData
-        // 'file' : test,
-    }
+  //   const payload = {
+  //       'documentFormat':'PDF',
+  //       'documentClass':'Letter 8.5 x 11',
+  //       'documentName': 'shashank',
+  //       'file' : formData
+  //       // 'file' : test,
+  //   }
 
-    const options = {
-      onUploadProgress: (progressEvent) => {
-        const {loaded, total} = progressEvent;
-        let percent = Math.floor( (loaded * 100) / total )
-        setBar(`${loaded}kb of ${total}kb | ${percent}%` );
-      }
-    }
+  //   const options = {
+  //     onUploadProgress: (progressEvent) => {
+  //       const {loaded, total} = progressEvent;
+  //       let percent = Math.floor( (loaded * 100) / total )
+  //       setBar(`${loaded}kb of ${total}kb | ${percent}%` );
+  //     }
+  //   }
 
-    const body = qs.stringify(payload)
-    // const body = payload
-    const res = await APIService.post(url, body, proxy, options );
-    if (res.status === 200) {
-        console.log('Document uploaded successfully');
-    } else {
-        console.log('Document upload failed');
-    }
-  }
+  //   const body = qs.stringify(payload)
+  //   // const body = payload
+  //   const res = await APIService.post(url, body, proxy, options );
+  //   if (res.status === 200) {
+  //       console.log('Document uploaded successfully');
+  //   } else {
+  //       console.log('Document upload failed');
+  //   }
+  // }
 
 
 

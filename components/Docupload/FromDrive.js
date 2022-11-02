@@ -17,7 +17,7 @@ const ErrorMessage = dynamic(() => import('../Shared/ErrorMessage'))
 import { convertXmltoJson } from '../../helper/helper'
 import { useRouter } from 'next/router';
 import LinearWithValueLabel from '../ProgressBar/progressbar';
-import GoogleLogin from '../Login/GoogleLogin'
+// import GoogleLogin from '../Login/GoogleLogin'
 
 
 const FromDrive = () => {

@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { NavContext } from '../Context/NavContextProvider';
-import Google from '../Login/GoogleLogin'
+// import Google from '../Login/GoogleLogin'
 import { useRouter } from 'next/router';
 
 
