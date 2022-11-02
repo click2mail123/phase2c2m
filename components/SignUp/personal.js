@@ -131,42 +131,6 @@ const PersonalForm = ({ updateStatus }) => {
     }
   }
 
-  const renderModalBody = () => {
-    let bodyHtml;
-    switch (addStatus) {
-      case 'success':
-        bodyHtml = (
-          <div className="modal-content border-0">
-            <div className="modal-header border-0 pb-0 pt-1">
-            </div>
-            <div className="modal-body">
-              <div className="text-center">
-                <a href="#" className="mb-2 successCircle" ><img src="/images/check.svg" alt="" /></a>
-                <h4 className="mb-2 successText">{message}</h4>
-              </div>
-            </div>
-          </div>)
-        break;
-      case 'fail':
-        bodyHtml = (
-          <div className="modal-content border-0">
-            <div className="modal-header border-0 pb-0 pt-1">
-            </div>
-            <div className="modal-body">
-              <div className="text-center">
-                <a href="#" className="mb-2"><img src="/images/info.svg" alt="" /></a>
-                <h4 className="mb-2 errorText">{message}</h4>
-                <p className="mb-2">Try again</p>
-              </div>
-            </div>
-          </div>
-        )
-        break;
-      default:
-        break;
-    }
-    return bodyHtml;
-  }
 
   return (
     <>

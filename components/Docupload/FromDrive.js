@@ -296,14 +296,11 @@ const FromDrive = () => {
     client.requestAccessToken();
   }
 
-  const getToken2 = () => {
-    router.push('/googlelogin', undefined, {scroll: false}) 
-  }
+
 
   return (
     <>
     { googleAuthObject.accessToken ? allTheFiles() : notLoggedIn() }
-        {/* { allTheFiles() }  */}
     </>
   )
 }
