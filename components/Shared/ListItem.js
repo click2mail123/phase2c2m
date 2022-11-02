@@ -11,7 +11,7 @@ const ListItem = (props) => {
   const { id, itemBody, actions, checkbox, isChecked, selectionHandler } = props;
   return (
     <div>
-      <div className="align-items-start d-flex justify-content-between col-12 mb-2 p-1">   
+      <div className="align-items-start d-flex justify-content-between col-12 mb-2 p-1">
         <div className="d-flex">
           <div className="form-group me-2">
             {checkbox &&

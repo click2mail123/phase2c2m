@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import CloseIcon from '@mui/icons-material/Close';
 
 /*
 @Params
@@ -29,7 +28,7 @@ const Modal = (props) => {
               <button
                 className={"close-btn"}
                 onClick={handleClose}
-              ><CloseIcon/></button>
+              >x</button>
             }
             {props.children}
           </div>

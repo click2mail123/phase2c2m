@@ -14,7 +14,6 @@ const NavContextProvider = (props) => {
     proofId: '',
     proofStatus: false,
     documentId: '',
-    jobAddressId: '',
     tokenId:'',
     accessToken: null,
     googleId:'',
@@ -22,39 +21,28 @@ const NavContextProvider = (props) => {
     googleAuthObject: {},
     documentName: '',
     jobSuccess: false,
-    fundAddSuccess: '',
-    documentSize: '',
-    globalproofUrl: '',
-    comingFromGoogle: '',
-    jobStatus: '',
-    layout: '',
-    mailClass: '',
-    noOfPieces: '',
-    paperType: '',
-    printOption: '',
-    cost : '',
-    envelope: '',
-    clonning: false
+    fundAddSuccess: ''
   })
 
   const checkIsMobile = () => {
     let isMobileView = navigator.userAgent.match(
       /BlackBerry|iPhone|Opera Mini|IEMobile|WPDesktop|(android(.*mobile))/i
-      );
+    );
     setState(prevState => ({ ...prevState, isMobile: isMobileView }));
   }
 
   useEffect(() => {console.log('STATE-----', state)}, [state])
 
   useEffect(() => {
-      checkIsMobile();
+    checkIsMobile();
   }, [])
 
   return (
-    <NavContext.Provider value={{ state, setState, checkIsMobile }}>
+    <NavContext.Provider value={{ state, setState }}>
       {props.children}
     </NavContext.Provider>
   )
 }
+
 
 export { NavContextProvider, NavContext }
