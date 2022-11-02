@@ -22,6 +22,8 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "18.0.0",
     "react-google-login": "^5.2.2",
+    "react-select": "^5.4.0",
+
     "universal-cookie": "^4.0.4",
     "xml-js": "^1.6.11"
   },
