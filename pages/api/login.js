@@ -20,7 +20,7 @@ export default async function loginhandler(req, res) {
       res.status(200).json({ res2 })
       res.status(500).json({ res2 })
       res.write(res2);
-      res.end();
+      // res.end();
     }
 
     if( req.body.payloadtype === 'googlelogin') {
@@ -35,7 +35,7 @@ export default async function loginhandler(req, res) {
       res.status(200).json({ res2 })
       res.status(500).json({ res2 })
       res.write(res2);
-      res.end();
+      // res.end();
     }
 
     if( req.body.payloadtype === 'signup') {
@@ -50,7 +50,7 @@ export default async function loginhandler(req, res) {
       res.status(200).json({ res2 })
       res.status(500).json({ res2 })
       res.write(res2);
-      res.end();
+      // res.end();
 
     }
 
@@ -66,7 +66,7 @@ export default async function loginhandler(req, res) {
       res.status(200).json({ res2 })
       res.status(500).json({ res2 })
       res.write(res2);
-      res.end();
+      // res.end();
     }
 
 
@@ -82,7 +82,7 @@ export default async function loginhandler(req, res) {
       res.status(200).json({ res2 })
       res.status(500).json({ res2 })
       res.write(res2);
-      res.end();
+      // res.end();
     }
 }
   
