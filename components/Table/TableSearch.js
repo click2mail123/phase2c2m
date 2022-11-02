@@ -19,22 +19,21 @@ const TableSearch = (props) => {
           variant="standard"
           value={value}
           onChange={onChange}
-          placeholder="Search List"
-          className='form-control border-0 ps-0'
-          // InputProps={{
-          //   startAdornment: <SearchIcon fontSize="small" />,
-          //   endAdornment: (
-          //     <IconButton
-          //       title="Clear"
-          //       aria-label="Clear"
-          //       size="small"
-          //       style={{ visibility: value ? 'visible' : 'hidden' }}
-          //       onClick={clearSearch}
-          //     >
-          //       <ClearIcon fontSize="small" />
-          //     </IconButton>
-          //   ),
-          // }}
+          placeholder="Search…"
+          InputProps={{
+            startAdornment: <SearchIcon fontSize="small" />,
+            endAdornment: (
+              <IconButton
+                title="Clear"
+                aria-label="Clear"
+                size="small"
+                style={{ visibility: value ? 'visible' : 'hidden' }}
+                onClick={clearSearch}
+              >
+                <ClearIcon fontSize="small" />
+              </IconButton>
+            ),
+          }}
           sx={{
             width: {
               xs: 1,
@@ -44,10 +43,10 @@ const TableSearch = (props) => {
             '& .MuiSvgIcon-root': {
               mr: 0.5,
             },
-            // '& .MuiInput-underline:before': {
-            //   // borderBottom: 1,
-            //   // borderColor: 'divider',
-            // },
+            '& .MuiInput-underline:before': {
+              borderBottom: 1,
+              borderColor: 'divider',
+            },
           }}
         />
       </div>
